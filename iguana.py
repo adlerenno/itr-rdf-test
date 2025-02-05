@@ -85,6 +85,7 @@ class Iguana:
 
 
     def is_installed(self) -> bool:
+        logging.info(f"Checking for path {self.executable_path}")
         if not self.executable_path.exists():
             return False
         
