@@ -32,9 +32,11 @@ if __name__ == "__main__":
 
     # install iguana
     iguana = Iguana(base_dir)
-    if not iguana.is_installed() and not dry_run:
+    if not iguana.is_installed():
         logging.info("Iguana is not installed. Installing it now.")
-        iguana.download_binaries()    
+        if not dry_run: iguana.download_binaries()
+    else:
+        logging.info(f"Found Iguana.")
     iguana.load_template(Path("template.yml"))
 
     # setup triplestores
@@ -42,12 +44,17 @@ if __name__ == "__main__":
         if not triplestore.is_installed():
             logging.info(f"Missing {triplestore.name}. Installing it now.")
             if not dry_run: triplestore.download()
+        else:
+            logging.info(f"Found {triplestore.name}.")
+
 
     # setup datasets
     for dataset in datasets:
         if not dataset.is_downloaded():
             logging.info(f"Missing {dataset.name} dataset. Downloading it now.")
             if not dry_run: dataset.download()
+        else:
+            logging.info(f"Found {dataset.name}.")
 
 
     # run benchmarks
