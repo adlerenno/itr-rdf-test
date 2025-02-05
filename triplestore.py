@@ -313,6 +313,7 @@ class ITR(Triplestore):
         cmake -DCMAKE_BUILD_TYPE="Release" -DCMAKE_INSTALL_PREFIX="/usr/local" ..
         make
         sudo make install""")
+        logging.info(f"Installation dir: {self.installation_dir}")
         command = f"""
         set -e
         cd {self.installation_dir}

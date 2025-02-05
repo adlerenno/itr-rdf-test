@@ -88,6 +88,8 @@ class Iguana:
         logging.info(f"Checking for path {self.executable_path}")
         if not self.executable_path.exists():
             return False
+        else:
+            return True
         
         process = subprocess.Popen([f"{self.executable_path}"], stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
         output, error = process.communicate()
