@@ -1,0 +1,54 @@
+datasets:
+  - name: "$dataset"  # doesn't do much
+
+connections:
+  - name: "$triplestore"
+    endpoint: "$triplestore_endpoint"
+
+tasks:
+  # warmup
+  - type: "stresstest"
+    workers:
+      - type: "SPARQLProtocolWorker"
+        requestType: "get query"            # post queries are bugged atm
+        number: 1                           # number of workers (threads)
+        queries:
+          path: "$dataset_queries"
+          order: "linear"
+          format: "one-per-line"
+        timeout: "$timeout_seconds s"
+        connection: "$triplestore"
+        parseResults: false                 # Kann auf true gesetzt werden, falls die query responses den sparql protocol 1.1 einhalten. Nützlich um zu prüfen, ob die Anzahl der Antworten zwischen System übereinstimmen, um zu prüfen ob die Antworten ungefähr richtig sind.
+                                            # Wird aber auch die gemessene Performance beeinträchtigen, da die Antworten geparsed werden müssen.
+        acceptHeader: "application/sparql-results+json"
+        completionTarget:
+          number: $warmup_query_runs
+
+  # actual benchmark
+  - type: "stresstest"
+    workers:
+      - type: "SPARQLProtocolWorker"
+        requestType: "get query"
+        number: 1
+        queries:
+          path: "$dataset_queries"
+          order: "linear"
+          format: "one-per-line"
+        timeout: "$timeout_seconds s"
+        connection: "$triplestore"
+        parseResults: false
+        acceptHeader: "application/sparql-results+json"
+        completionTarget:
+          number: $query_runs
+
+storages:
+  - type: "csv file"
+    directory: "$result_directory/"
+  - type: "rdf file"
+    path: "$result_directory/result.ttl"
+  - type: "rdf file"
+    path: "$result_directory/result.nt"
+
+responseBodyProcessors:
+  - contentType: "application/sparql-results+json"
+    threads: 1

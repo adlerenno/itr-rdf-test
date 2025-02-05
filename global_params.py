@@ -1,0 +1,1 @@
+ram_limit_g = 768 # ram limit in gigabytes
