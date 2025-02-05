@@ -305,10 +305,23 @@ class ITR(Triplestore):
     def download(self) -> None:
         # download ITR
         command = f"""
-        pwd
+        set -e
         cd {self.installation_dir}
+        sudo apt install -y build-essential autoconf libtool
+        sudo apt-get install -y libserd-0-0
+        sudo apt-get install -y libmicrohttpd-dev
+        git clone https://github.com/y-256/libdivsufsort.git
+        cd libdivsufsort
+        mkdir build
+        cd build
+        cmake -DCMAKE_BUILD_TYPE="Release" -DCMAKE_INSTALL_PREFIX="/usr/local" ..
+        make
+        sudo make install
+        
+        cd ../..
         git clone https://github.com/adlerenno/IncidenceTypeRePair.git
-        cd IncidenceTypeRePair
+        mv IncidenceTypeRePair itr
+        cd itr
         mkdir -p build
         cd build
         cmake -DCMAKE_BUILD_TYPE=Release -DOPTIMIZE_FOR_NATIVE=on -DWITH_RRR=on -DCLI=on -DWEB_SERVICE=on ..
