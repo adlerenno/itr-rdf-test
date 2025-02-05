@@ -307,6 +307,7 @@ class ITR(Triplestore):
         bash(f"""
         cd {self.installation_dir}
         git clone https://github.com/adlerenno/IncidenceTypeRePair.git
+        cd IncidenceTypeRePair
         mkdir -p build
         cd build
         cmake -DCMAKE_BUILD_TYPE=Release -DOPTIMIZE_FOR_NATIVE=on -DWITH_RRR=on -DCLI=on -DWEB_SERVICE=on ..
