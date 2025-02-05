@@ -37,17 +37,18 @@ if __name__ == "__main__":
         iguana.download_binaries()    
     iguana.load_template(Path("template.yml"))
 
+    # setup triplestores
+    for triplestore in triplestores:
+        if not triplestore.is_installed():
+            logging.info(f"Missing {triplestore.name}. Installing it now.")
+            if not dry_run: triplestore.download()
+
     # setup datasets
     for dataset in datasets:
         if not dataset.is_downloaded():
             logging.info(f"Missing {dataset.name} dataset. Downloading it now.")
             if not dry_run: dataset.download()
 
-    # setup triplestores
-    for triplestore in triplestores:
-        if not triplestore.is_installed():
-            logging.info(f"Missing {triplestore.name}. Installing it now.")
-            if not dry_run: triplestore.download()
 
     # run benchmarks
     for dataset in datasets:
