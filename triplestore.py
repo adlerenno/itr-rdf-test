@@ -177,13 +177,13 @@ class Fuseki(Triplestore):
 
     def download(self) -> None:
         util.download_file(url=f"https://dlcdn.apache.org/jena/binaries/apache-jena-fuseki-{self.version}.tar.gz",
-                        checksum=0x650d4576927cb4e330c372c46f76dde3fbd683b59cc692bac501b545097402c58c2254b25502e4225ba6f7d4c79ee12c5e43b78124115dbbe6371c487aa8604f,
+                        checksum=0x5204eefefb921ec029346139f5cb768fe298c816c8642ab590c9bdcee4f24cfacfb15c4266f7acf020d0d5232eea909e4af876f1d5162231ea4b8f8fe0feb3cf,
                         checksum_type="sha512",
                         dest=self.installation_dir.joinpath(f"apache-jena-fuseki-{self.version}.tar.gz"))
         bash(f"tar -xf {self.installation_dir.joinpath(f"apache-jena-fuseki-{self.version}.tar.gz")} -C {self.installation_dir}")
         self.installation_dir.joinpath(f"apache-jena-fuseki-{self.version}.tar.gz").unlink(missing_ok=True)
         util.download_file(url=f"https://dlcdn.apache.org/jena/binaries/apache-jena-{self.version}.tar.gz",
-                        checksum=0x9a66044573ca269c0a9a1191fe7a8e1925f2d77e2e0bdadddd68616a1bafed1d9819c0b2988dd03614ec778a3882ccb091d825976fc0837406916f9f001b701c,
+                        checksum=0x996e2fd103ea6211c2f20d80402df83982375d58b3a967aa90e68cf5499a21d16e0b70a39716c28ad3b7ff2666cf875930ca76d0179536ab7e70778c136d81c1,
                         checksum_type="sha512",
                         dest=self.installation_dir.joinpath(f"apache-jena-{self.version}.tar.gz"))
         bash(f"tar -xf {self.installation_dir}/apache-jena-{self.version}.tar.gz -C {self.installation_dir}")
