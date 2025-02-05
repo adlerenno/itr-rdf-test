@@ -169,7 +169,7 @@ class Oxigraph(Triplestore):
 class Fuseki(Triplestore):
     def __init__(self, *args, **kwargs):
         super().__init__("fuseki", *args, **kwargs)
-        self.version = "5.2.0"
+        self.version = "5.3.0"
         self.jena_dir = self.installation_dir.joinpath(f"apache-jena-{self.version}")
         self.fuseki_dir = self.installation_dir.joinpath(f"apache-jena-fuseki-{self.version}")
         self.sparql_endpoint = "http://localhost:3030/ds/sparql"
@@ -306,6 +306,7 @@ class ITR(Triplestore):
         # download ITR
         bash(f"""
         cd {self.installation_dir}
+        git clone https://github.com/adlerenno/IncidenceTypeRePair.git
         mkdir -p build
         cd build
         cmake -DCMAKE_BUILD_TYPE=Release -DOPTIMIZE_FOR_NATIVE=on -DWITH_RRR=on -DCLI=on -DWEB_SERVICE=on ..
