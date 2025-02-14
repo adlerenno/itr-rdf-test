@@ -339,7 +339,7 @@ class ITR(Triplestore):
 
         db_version = DatabaseVersion.for_dataset(dataset)
 
-        proc = subprocess.Popen([f"{self.installation_dir.absolute()}/cgraph-cli",
+        proc = subprocess.Popen([f"{self.installation_dir.absolute()}/build/cgraph-cli",
                                  "--max-rank", "128",
                                  "--factor", "64",
                                  "--sampling", "0",
@@ -355,6 +355,6 @@ class ITR(Triplestore):
         :param db_version:  The database version to start
         :return:          The handle to the process
         """
-        return subprocess.Popen([f"{self.installation_dir.absolute()}/cgraph-cli",
+        return subprocess.Popen([f"{self.installation_dir.absolute()}/build/cgraph-cli",
                                  self.dataset_db_dir(db_version.dataset),
                                  "--port", "8080"])
