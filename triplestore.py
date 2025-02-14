@@ -319,7 +319,7 @@ class ITR(Triplestore):
         set -e
         cd {self.database_dir.parent}
         git clone https://github.com/adlerenno/IncidenceTypeRePair.git
-        mv ./IncidenceTypeRePair ./itr
+        mv IncidenceTypeRePair/ itr
         cd itr
         mkdir -p build
         cd build
