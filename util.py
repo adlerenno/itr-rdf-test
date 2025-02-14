@@ -1,3 +1,4 @@
+import logging
 import sys
 from enum import Enum
 from pathlib import Path
@@ -108,7 +109,9 @@ def wait_until_available(url: str, timeout: int = sys.maxsize):
     import time
     import requests
     tried = 0
-    if '8080' in url: return  # shortcut for ITR, because you cannot prove easily that the server responds.
+    if '8080' in url:
+        url += "?query=SELECT%20?s%20?p%20?o%20WHERE%20{%20?s%20?p%2004%20.%20}"
+        logging.info(f"itr online check url: {url}")
     # wait for triplestore to start
     while tried < timeout:
         try:
