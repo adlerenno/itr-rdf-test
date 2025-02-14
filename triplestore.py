@@ -338,7 +338,12 @@ class ITR(Triplestore):
         db_dir.mkdir(parents=True, exist_ok=False)  # intentionally throw if exists
 
         db_version = DatabaseVersion.for_dataset(dataset)
-
+        logging.info(f"{self.installation_dir.absolute()}/build/cgraph-cli",
+                                 "--max-rank", "128",
+                                 "--factor", "64",
+                                 "--sampling", "0",
+                                 "--rrr"
+                                 f"{dataset.dataset_path}", db_dir)
         proc = subprocess.Popen([f"{self.installation_dir.absolute()}/build/cgraph-cli",
                                  "--max-rank", "128",
                                  "--factor", "64",
