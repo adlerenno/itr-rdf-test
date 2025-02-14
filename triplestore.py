@@ -320,7 +320,7 @@ class ITR(Triplestore):
         sudo make install""")
         command = f"""
         set -e
-        cd {self.database_dir.parent}
+        cd {self.installation_dir.parent}
         git clone https://github.com/adlerenno/IncidenceTypeRePair.git
         mv IncidenceTypeRePair itr
         cd itr
