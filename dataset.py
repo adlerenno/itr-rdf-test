@@ -4,6 +4,7 @@ import zipfile
 from query_translate import process_sparql_file
 from util import bash, hash_file, download_file
 
+
 class Dataset:
     def __init__(self, name, datasets_dir: Path):
         self.name = name
