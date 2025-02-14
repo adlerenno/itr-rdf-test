@@ -176,6 +176,7 @@ class Fuseki(Triplestore):
         self.update_endpoint = "http://localhost:3030/ds/update"
 
     def download(self) -> None:
+        bash("sudo apt install -y default-jdk")
         util.download_file(url=f"https://dlcdn.apache.org/jena/binaries/apache-jena-fuseki-{self.version}.tar.gz",
                         checksum=0x5204eefefb921ec029346139f5cb768fe298c816c8642ab590c9bdcee4f24cfacfb15c4266f7acf020d0d5232eea909e4af876f1d5162231ea4b8f8fe0feb3cf,
                         checksum_type="sha512",
