@@ -306,6 +306,7 @@ class ITR(Triplestore):
         # download ITR
         bash("sudo apt-get install -y libserd-0-0")
         bash("sudo apt-get install -y libmicrohttpd-dev")
+        bash("sudo apt-get install -y cmake")
         bash("""git clone https://github.com/y-256/libdivsufsort.git
         cd libdivsufsort
         mkdir build
@@ -313,10 +314,10 @@ class ITR(Triplestore):
         cmake -DCMAKE_BUILD_TYPE="Release" -DCMAKE_INSTALL_PREFIX="/usr/local" ..
         make
         sudo make install""")
-        logging.info(f"Installation dir: {self.installation_dir}")
+        logging.info(f"Installation dir: {self.database_dir}")
         command = f"""
         set -e
-        cd {self.installation_dir}
+        cd {self.database_dir.parent}
         git clone https://github.com/adlerenno/IncidenceTypeRePair.git
         mv IncidenceTypeRePair itr
         cd itr
