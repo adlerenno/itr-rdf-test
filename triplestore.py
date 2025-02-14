@@ -343,19 +343,20 @@ class ITR(Triplestore):
         db_dir.mkdir(parents=True, exist_ok=False)  # intentionally throw if exists
 
         db_version = DatabaseVersion.for_dataset(dataset)
-        logging.info(f"{self.installation_dir.absolute()}/build/cgraph-cli --max-rank 128"
-                     "--factor 64"
-                     "--sampling 0"
-                     "--rrr"
+        logging.info(f"{self.installation_dir.absolute()}/build/cgraph-cli --max-rank 128 "
+                     "--factor 64 "
+                     "--sampling 0 "
+                     "--rrr "
                      f"{dataset.dataset_path} {db_dir}")
         proc = subprocess.Popen([f"{self.installation_dir.absolute()}/build/cgraph-cli",
                                  "--max-rank", "128",
                                  "--factor", "64",
                                  "--sampling", "0",
-                                 "--rrr"
+                                 "--rrr",
                                  f"{dataset.dataset_path}", db_dir,
                                  ])
         mem = util.monitor_memory_usage(proc)
+        proc.wait()
         return db_version, mem
 
     def start(self, db_version: DatabaseVersion) -> Popen[bytes]:
