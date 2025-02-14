@@ -304,10 +304,12 @@ class ITR(Triplestore):
 
     def download(self) -> None:
         # download ITR
-        bash("sudo apt-get install -y libserd-0-0")
+        bash("sudo apt-get install -y libserd-dev")
         bash("sudo apt-get install -y libmicrohttpd-dev")
         bash("sudo apt-get install -y cmake")
-        bash("""git clone https://github.com/y-256/libdivsufsort.git
+        bash("""
+        set -e
+        git clone https://github.com/y-256/libdivsufsort.git
         cd libdivsufsort
         mkdir build
         cd build
@@ -315,6 +317,7 @@ class ITR(Triplestore):
         make
         sudo make install""")
         logging.info(f"Installation dir: {self.database_dir}")
+        logging.info(f"Installation dir: {self.installation_dir}")
         command = f"""
         set -e
         cd {self.database_dir.parent}
