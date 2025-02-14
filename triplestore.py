@@ -304,6 +304,8 @@ class ITR(Triplestore):
 
     def download(self) -> None:
         # download ITR
+        logging.info(f"Database dir: {self.database_dir}")
+        logging.info(f"Installation dir: {self.installation_dir}")
         bash("sudo apt-get install -y libserd-dev")
         bash("sudo apt-get install -y libmicrohttpd-dev")
         bash("sudo apt-get install -y cmake")
@@ -316,8 +318,6 @@ class ITR(Triplestore):
         cmake -DCMAKE_BUILD_TYPE="Release" -DCMAKE_INSTALL_PREFIX="/usr/local" -DBUILD_DIVSUFSORT64=ON -DUSE_OPENMP=ON ..
         make
         sudo make install""")
-        logging.info(f"Installation dir: {self.database_dir}")
-        logging.info(f"Installation dir: {self.installation_dir}")
         command = f"""
         set -e
         cd {self.database_dir.parent}
