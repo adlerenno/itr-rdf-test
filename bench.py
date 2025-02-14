@@ -28,7 +28,8 @@ if __name__ == "__main__":
     datasets_dir = base_dir.joinpath("datasets")
     # might be best to start only with swdf first, as it is the smallest dataset
     datasets: list[Dataset] = [SWDF(datasets_dir)]#, DBpedia2015(datasets_dir), Wikidata(datasets_dir), Watdiv(datasets_dir)] # select datasets here
-    triplestores: list[Triplestore] = [Tentris(base_dir), Fuseki(base_dir), ITR(base_dir)]#, Oxigraph(base_dir), Virtuoso(base_dir)]         # select triplestores here
+    triplestores: list[Triplestore] = [#Tentris(base_dir), Fuseki(base_dir),
+                                       ITR(base_dir)]#, Oxigraph(base_dir), Virtuoso(base_dir)]         # select triplestores here
 
     # install iguana
     iguana = Iguana(base_dir)
