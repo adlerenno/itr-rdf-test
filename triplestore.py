@@ -71,10 +71,10 @@ class Triplestore:
     def database_logs_dir(self, db_version: DatabaseVersion) -> Path:
         return self.logs_dir.joinpath(
             f"{db_version.dataset.name}/{self.name}/{db_version.timestamp.isoformat()}")
-    
+
     def download(self) -> None:
         raise NotImplemented()
-    
+
     def is_installed(self) -> bool:
         return self.installation_dir.exists()
 
@@ -84,10 +84,9 @@ class Triplestore:
 
     def dataset_db_dir(self, dataset: Dataset) -> Path:
         return self.database_dir.joinpath(dataset.name)
-    
+
     def is_database_loaded(self, dataset: Dataset) -> bool:
         return self.dataset_db_dir(dataset).exists()
-    
 
 
 class Tentris(Triplestore):
@@ -97,7 +96,8 @@ class Tentris(Triplestore):
 
     def download(self) -> None:
         # download tentris
-        util.download_and_extract("https://github.com/dice-group/tentris/releases/download/v1.4.0/tentris.zip", self.installation_dir, compression_algorithm=util.CompressionAlgorithm.ZIP)
+        util.download_and_extract("https://github.com/dice-group/tentris/releases/download/v1.4.0/tentris.zip",
+                                  self.installation_dir, compression_algorithm=util.CompressionAlgorithm.ZIP)
         self.installation_dir.joinpath("tentris_loader").chmod(0o755)
         self.installation_dir.joinpath("tentris_server").chmod(0o755)
         assert self.is_installed()
@@ -110,11 +110,11 @@ class Tentris(Triplestore):
         log_dir = self.database_logs_dir(db_version)
 
         proc = subprocess.Popen([f"{self.installation_dir.absolute()}/tentris_loader",
-                        "--file", f"{dataset.dataset_path}",
-                        "--storage", db_dir,
-                        "--logfiledir",
-                        f"{log_dir.absolute()}",
-                        "--loglevel", "trace"])
+                                 "--file", f"{dataset.dataset_path}",
+                                 "--storage", db_dir,
+                                 "--logfiledir",
+                                 f"{log_dir.absolute()}",
+                                 "--loglevel", "trace"])
         mem = util.monitor_memory_usage(proc)
         return db_version, mem
 
@@ -131,6 +131,7 @@ class Tentris(Triplestore):
                                  f"{self.database_logs_dir(db_version)}/",
                                  "--loglevel", "info"])
 
+
 class Oxigraph(Triplestore):
     def __init__(self, *args, **kwargs):
         super().__init__("oxigraph", *args, **kwargs)
@@ -139,7 +140,9 @@ class Oxigraph(Triplestore):
         self.update_endpoint: str = "http://localhost:7878/update"
 
     def download(self) -> None:
-        util.download_file("https://github.com/oxigraph/oxigraph/releases/download/v0.3.22/oxigraph_server_v0.3.22_x86_64_linux_gnu", self.executable_path)
+        util.download_file(
+            "https://github.com/oxigraph/oxigraph/releases/download/v0.3.22/oxigraph_server_v0.3.22_x86_64_linux_gnu",
+            self.executable_path)
         self.executable_path.chmod(0o755)
         assert self.is_installed()
 
@@ -153,10 +156,10 @@ class Oxigraph(Triplestore):
 
         with open(log_dir.joinpath("loading.log"), "w") as f:
             proc = subprocess.Popen([f"{self.executable_path}",
-                            "load",
-                            "--file", f"{dataset.dataset_path}",
-                            "--location", db_dir,
-                            "--lenient"], stdout=f, stderr=subprocess.STDOUT)
+                                     "load",
+                                     "--file", f"{dataset.dataset_path}",
+                                     "--location", db_dir,
+                                     "--lenient"], stdout=f, stderr=subprocess.STDOUT)
             mem = util.monitor_memory_usage(proc)
         return db_version, mem
 
@@ -178,18 +181,18 @@ class Fuseki(Triplestore):
     def download(self) -> None:
         bash("sudo apt install -y default-jdk")
         util.download_file(url=f"https://dlcdn.apache.org/jena/binaries/apache-jena-fuseki-{self.version}.tar.gz",
-                        checksum=0x5204eefefb921ec029346139f5cb768fe298c816c8642ab590c9bdcee4f24cfacfb15c4266f7acf020d0d5232eea909e4af876f1d5162231ea4b8f8fe0feb3cf,
-                        checksum_type="sha512",
-                        dest=self.installation_dir.joinpath(f"apache-jena-fuseki-{self.version}.tar.gz"))
-        bash(f"tar -xf {self.installation_dir.joinpath(f"apache-jena-fuseki-{self.version}.tar.gz")} -C {self.installation_dir}")
+                           checksum=0x5204eefefb921ec029346139f5cb768fe298c816c8642ab590c9bdcee4f24cfacfb15c4266f7acf020d0d5232eea909e4af876f1d5162231ea4b8f8fe0feb3cf,
+                           checksum_type="sha512",
+                           dest=self.installation_dir.joinpath(f"apache-jena-fuseki-{self.version}.tar.gz"))
+        bash(
+            f"tar -xf {self.installation_dir.joinpath(f"apache-jena-fuseki-{self.version}.tar.gz")} -C {self.installation_dir}")
         self.installation_dir.joinpath(f"apache-jena-fuseki-{self.version}.tar.gz").unlink(missing_ok=True)
         util.download_file(url=f"https://dlcdn.apache.org/jena/binaries/apache-jena-{self.version}.tar.gz",
-                        checksum=0x996e2fd103ea6211c2f20d80402df83982375d58b3a967aa90e68cf5499a21d16e0b70a39716c28ad3b7ff2666cf875930ca76d0179536ab7e70778c136d81c1,
-                        checksum_type="sha512",
-                        dest=self.installation_dir.joinpath(f"apache-jena-{self.version}.tar.gz"))
+                           checksum=0x996e2fd103ea6211c2f20d80402df83982375d58b3a967aa90e68cf5499a21d16e0b70a39716c28ad3b7ff2666cf875930ca76d0179536ab7e70778c136d81c1,
+                           checksum_type="sha512",
+                           dest=self.installation_dir.joinpath(f"apache-jena-{self.version}.tar.gz"))
         bash(f"tar -xf {self.installation_dir}/apache-jena-{self.version}.tar.gz -C {self.installation_dir}")
         self.installation_dir.joinpath(f"apache-jena-{self.version}.tar.gz").unlink(missing_ok=True)
-
 
     def _load_impl(self, dataset: Dataset) -> DatabaseVersion:
         db_dir = self.dataset_db_dir(dataset)
@@ -206,10 +209,10 @@ class Fuseki(Triplestore):
 
         with open(log_dir.joinpath("loading.log"), "w") as f:
             r = subprocess.Popen([f"{self.jena_dir}/bin/tdb2.tdbloader",
-                                "--loc", f"{db_dir}",
-                                f"{dataset.dataset_path}", ],
-                               stdout=f, stderr=subprocess.STDOUT,
-                               env=env_opts)
+                                  "--loc", f"{db_dir}",
+                                  f"{dataset.dataset_path}", ],
+                                 stdout=f, stderr=subprocess.STDOUT,
+                                 env=env_opts)
             mem = util.monitor_memory_usage(r)
             assert r.returncode == 0
 
@@ -237,7 +240,8 @@ class Virtuoso(Triplestore):
         bash(
             f"curl -L https://github.com/openlink/virtuoso-opensource/releases/download/v7.2.12/virtuoso-opensource.x86_64-generic_glibc25-linux-gnu.tar.gz"
             f" | tar -xz -C {self.installation_dir.parent}")
-        self.installation_dir.parent.joinpath("virtuoso-opensource").rename(self.installation_dir.parent.joinpath("virtuoso"))
+        self.installation_dir.parent.joinpath("virtuoso-opensource").rename(
+            self.installation_dir.parent.joinpath("virtuoso"))
         assert self.is_installed()
 
     def _load_impl(self, dataset: Dataset) -> DatabaseVersion:
@@ -277,7 +281,8 @@ INSERT INTO DB.DBA.SYS_SPARQL_HOST (SH_HOST, SH_GRAPH_URI) VALUES ('localhost:88
 checkpoint;
 shutdown;"""
 
-        p2 = subprocess.Popen([f"{self.installation_dir.joinpath('bin').joinpath('isql')}"], text=True, stdin=subprocess.PIPE)
+        p2 = subprocess.Popen([f"{self.installation_dir.joinpath('bin').joinpath('isql')}"], text=True,
+                              stdin=subprocess.PIPE)
         p2.communicate(input=command)
         mem = util.monitor_memory_usage(p)
         p2.wait()
@@ -338,12 +343,11 @@ class ITR(Triplestore):
         db_dir.mkdir(parents=True, exist_ok=False)  # intentionally throw if exists
 
         db_version = DatabaseVersion.for_dataset(dataset)
-        logging.info(f"{self.installation_dir.absolute()}/build/cgraph-cli",
-                                 "--max-rank", "128",
-                                 "--factor", "64",
-                                 "--sampling", "0",
-                                 "--rrr"
-                                 f"{dataset.dataset_path}", db_dir)
+        logging.info(f"{self.installation_dir.absolute()}/build/cgraph-cli --max-rank 128"
+                     "--factor 64"
+                     "--sampling 0"
+                     "--rrr"
+                     f"{dataset.dataset_path} {db_dir}")
         proc = subprocess.Popen([f"{self.installation_dir.absolute()}/build/cgraph-cli",
                                  "--max-rank", "128",
                                  "--factor", "64",
