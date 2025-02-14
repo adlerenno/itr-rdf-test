@@ -365,7 +365,10 @@ class ITR(Triplestore):
         :param db_version:  The database version to start
         :return:          The handle to the process
         """
-        logging.info(f"ITR load: {self.dataset_db_dir(db_version.dataset)}")
+        logging.info(f"itr load: {self.dataset_db_dir(db_version.dataset)}")
+        logging.info(f"{self.installation_dir.absolute()}/build/cgraph-cli "
+                                 f"{self.dataset_db_dir(db_version.dataset)} "
+                                 "--port 8080")
         return subprocess.Popen([f"{self.installation_dir.absolute()}/build/cgraph-cli",
                                  self.dataset_db_dir(db_version.dataset),
                                  "--port", "8080"])
