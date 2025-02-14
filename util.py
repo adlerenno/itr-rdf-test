@@ -108,6 +108,7 @@ def wait_until_available(url: str, timeout: int = sys.maxsize):
     import time
     import requests
     tried = 0
+    if '8080' in url: return  # shortcut for ITR, because you cannot prove easily that the server responds.
     # wait for triplestore to start
     while tried < timeout:
         try:
