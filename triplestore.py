@@ -340,7 +340,7 @@ class ITR(Triplestore):
 
     def _load_impl(self, dataset: Dataset) -> tuple[DatabaseVersion, int]:
         db_dir = self.dataset_db_dir(dataset)
-        db_dir.mkdir(parents=True, exist_ok=False)  # intentionally throw if exists
+        db_dir.parent.mkdir(parents=True, exist_ok=True)  # intentionally throw if exists file, intentionally not throw error if parent exists
 
         db_version = DatabaseVersion.for_dataset(dataset)
         logging.info(f"{self.installation_dir.absolute()}/build/cgraph-cli --max-rank 128 "
