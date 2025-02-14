@@ -311,7 +311,7 @@ class ITR(Triplestore):
         cd libdivsufsort
         mkdir build
         cd build
-        cmake -DCMAKE_BUILD_TYPE="Release" -DCMAKE_INSTALL_PREFIX="/usr/local" ..
+        cmake -DCMAKE_BUILD_TYPE="Release" -DCMAKE_INSTALL_PREFIX="/usr/local" -DBUILD_DIVSUFSORT64=ON -DUSE_OPENMP=ON ..
         make
         sudo make install""")
         logging.info(f"Installation dir: {self.database_dir}")
