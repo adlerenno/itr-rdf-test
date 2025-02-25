@@ -368,7 +368,8 @@ class ITR(Triplestore):
         logging.info(f"itr load: {self.dataset_db_dir(db_version.dataset)}")
         logging.info(f"{self.installation_dir.absolute()}/build/cgraph-cli "
                                  f"{self.dataset_db_dir(db_version.dataset)} "
+                                 "-v "
                                  "--port 8080")
         return subprocess.Popen([f"{self.installation_dir.absolute()}/build/cgraph-cli",
-                                 self.dataset_db_dir(db_version.dataset),
+                                 self.dataset_db_dir(db_version.dataset), "-v",
                                  "--port", "8080"])
